@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SP KOREA OPT — Корейская косметика по оптовым ценам</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #fffaf7;
+            --accent: #d2b48c;
+            --text: #504030;
+            --header: #b48c70;
+            --card-bg: #fff;
+            --button: #e07a98;
+            --button-hover: #c86a86;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: var(--header);
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+        .header p {
+            color: #777;
+            font-size: 16px;
+        }
+        .brand {
+            margin: 30px 0 15px;
+            color: var(--header);
+            font-size: 22px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+        }
+        .card-body {
+            padding: 18px;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 0 8px;
+            color: var(--text);
+        }
+        .card-volume {
+            font-size: 14px;
+            color: #888;
+            margin: 0 0 8px;
+        }
+        .card-price {
+            font-size: 18px;
+            color: var(--button);
+            font-weight: 700;
+        }
+        .card-article {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: #666;
+            margin: 10px 0;
+            max-height: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--button);
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: var(--button-hover);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
+            font-size: 13px;
+            padding: 20px;
+            border-top: 1px dashed #ddd;
+        }
+        @media (max-width: 600px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌸 SP KOREA OPT</h1>
+        <p>Корейская косметика по оптовым ценам</p>
+    </div>
+
+    {% for brand, products in grouped_products.items() %}
+    <h2 class="brand">{{ brand }}</h2>
+    <div class="products">
+        {% for p in products %}
+        <div class="card">
+            <div class="card-body">
+                <div class="card-article">Арт: {{ p.article }}</div>
+                <div class="card-title">{{ p.name_en or p.name }}</div>
+                {% if p.volume %}
+                <div class="card-volume">{{ p.volume }}</div>
+                {% endif %}
+                <div class="card-price">{{ "{:,}".format(p.price).replace(',', ' ') }} ₽</div>
+                {% if p.description %}
+                <div class="card-desc">{{ p.description|replace("**", "")|striptags|truncate(120) }}</div>
+                {% endif %}
+                <!-- Прямая ссылка на добавление -->
+                <a href="https://t.me/koreazakupkabot?start=add_{{ p.article }}" class="btn" target="_blank">
+                    🛒 Добавить в корзину
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="footer">
+        🚚 Доставка: СДЭК, Ozon, Почта РФ | 💬 @your_admin | Актуально на: {{ date }}
+    </div>
+</body>
+</html>
